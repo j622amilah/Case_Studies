@@ -807,13 +807,13 @@ if [[ $val == "X0" ]]
 then 
 
     # Create a new DATASET named PROJECT_ID
-    # export dataset_name=$(echo "google_analytics_exercise")
+    # export dataset_name=$(echo "google_analytics")
     # bq --location=$location mk $PROJECT_ID:$dataset_name
 
     # OR 
 
     # Use existing dataset
-    export dataset_name=$(echo "google_analytics_exercise")
+    export dataset_name=$(echo "google_analytics")
 
     # ------------------------
 
@@ -931,17 +931,23 @@ fi
 # ---------------------------------------------
 # Upload csv files from the PC to GCP
 # ---------------------------------------------
-# ******* CHANGE *******
-declare -a UPLOAD_PATHS=('$folder_2_organize/exact_match_header' '$folder_2_organize/similar_match_header/exact_match_header');
-# ******* CHANGE *******
+export val=$(echo "X1")
 
-for cur_path in "${UPLOAD_PATHS[@]}"
-do	
-	echo "cur_path"
-	echo $cur_path
-	upload_csv_files $location $cur_path $dataset_name
-done
+if [[ $val == "X0" ]]
+then 
+	    
+	# ******* CHANGE *******
+	declare -a UPLOAD_PATHS=('$folder_2_organize/exact_match_header' '$folder_2_organize/similar_match_header/exact_match_header');
+	# ******* CHANGE *******
 
+	for cur_path in "${UPLOAD_PATHS[@]}"
+	do	
+		echo "cur_path"
+		echo $cur_path
+		upload_csv_files $location $cur_path $dataset_name
+	done
+
+fi
 
 
 
@@ -969,8 +975,12 @@ fi
 # -------------------------
 # Join the TABLES 
 # -------------------------
-join_two_tables
+export val=$(echo "X1")
 
+if [[ $val == "X0" ]]
+then 
+    join_two_tables
+fi
 
 
 # -------------------------
@@ -993,19 +1003,28 @@ join_two_tables
 # -------------------------
 # CLEAN TABLE bikeshare_full_clean0 :  Identify the main features for the analysis
 # -------------------------
-# CLEAN_TABLE_bikeshare_full_clean0
+export val=$(echo "X1")
 
+if [[ $val == "X0" ]]
+then
+    CLEAN_TABLE_bikeshare_full_clean0
+fi
 
 
 # -------------------------
 # CLEAN TABLE bikeshare_full_clean1
 # -------------------------
-# Delete TABLE bikeshare_full_clean1
-# bq rm -t $PROJECT_ID:$dataset_name.bikeshare_full_clean1
+export val=$(echo "X1")
 
-# Create TABLE bikeshare_full_clean1
-# CLEAN_TABLE_bikeshare_full_clean1
+if [[ $val == "X0" ]]
+then 
+    
+    # Delete TABLE bikeshare_full_clean1
+    bq rm -t $PROJECT_ID:$dataset_name.bikeshare_full_clean1
 
+    # Create TABLE bikeshare_full_clean1
+    CLEAN_TABLE_bikeshare_full_clean1
+fi
 
 
 # ---------------------------------------------
@@ -1025,7 +1044,7 @@ join_two_tables
 
 # Statistical significance of probablistic count for CATEGORICAL features
 # *** NOT AUTOMATED, but written out *** 
-export val=$(echo "X0")
+export val=$(echo "X1")
 
 if [[ $val == "X0" ]]
 then 
@@ -1160,13 +1179,16 @@ fi
 # Feature engineering
 # 0. Fill NULL values, 1. Normalize the features from 0 to 1
 # -------------------------
+export TABLE_name2=$(echo "bikeshare_full_cleanML1")
+
+
 export val=$(echo "X1")
 
 if [[ $val == "X0" ]]
 then 
 	# Types of normalization : https://cloud.google.com/bigquery/docs/reference/standard-sql/bigqueryml-syntax-standard-scaler
 	
-	export TABLE_name2=$(echo "bikeshare_full_cleanML1")
+	bq rm -t $PROJECT_ID:$dataset_name.$TABLE_name2
 	
 	bq query \
             --location=$location \
@@ -1192,8 +1214,6 @@ fi
 # -------------------------
 # Test Train split
 # -------------------------
-
-
 export label_name=$(echo "member_casual")
 export train_split=$(echo "0.75")
 export TRAIN_TABLE_name=$(echo "TRAIN_TABLE_name")
@@ -1233,6 +1253,7 @@ then
 	
 	echo "K-means clustering: "
 	bq rm -f --model $PROJECT_ID:$dataset_name.$MODEL_name
+	
 	kmeans $location $PROJECT_ID $dataset_name $TRAIN_TABLE_name $TESTING_TABLE_name $MODEL_name $PREDICTED_results_TABLE_name 
 
 	# ***** Fix syntax Problems *****
@@ -1295,6 +1316,7 @@ export val=$(echo "X1")
 
 if [[ $val == "X0" ]]
 then 
+	bq rm -t $PROJECT_ID:$dataset_name.$PREDICTED_results_TABLE_name2
 	
 	bq query \
             --location=$location \
@@ -1314,7 +1336,7 @@ then
     UNNEST(NEAREST_CENTROIDS_DISTANCE) AS NCD
     )
     SELECT *,
-    (num_row*0) AS zero_col FROM tabtemp'
+    (row_num*0) AS zero_col FROM tabtemp'
 
 fi
 
@@ -1328,7 +1350,9 @@ export PREDICTED_results_TABLE_name3=$(echo "kmeans_model_cosine_PREDICTED_resul
 export val=$(echo "X1")
 
 if [[ $val == "X0" ]]
-then 
+then 	
+	
+	bq rm -t $PROJECT_ID:$dataset_name.$PREDICTED_results_TABLE_name3
 	
 	bq query \
             --location=$location \
@@ -1337,14 +1361,11 @@ then
             --use_legacy_sql=false \
     'WITH tabtemp AS(
     SELECT *,
-    zero_col*( AVG( SQRT( (((POW(trip_time_norm, 2) + POW(birthyear_INTfill_norm, 2) + POW(rideable_type_INTfill_norm, 2)) / POW(trip_time_norm + birthyear_INTfill_norm + rideable_type_INTfill_norm,2))*(cos(cosine_dist)*cos(cosine_dist))) / (3*2) ) ) FROM `'$PROJECT_ID'.'$dataset_name'.'$PREDICTED_results_TABLE_name2'` WHERE member_casual = "member") AS SWC_centroid
+    zero_col*(SELECT AVG( SQRT( (((POW(trip_time_norm, 2) + POW(birthyear_INTfill_norm, 2) + POW(rideable_type_INTfill_norm, 2)) / POW(trip_time_norm + birthyear_INTfill_norm + rideable_type_INTfill_norm,2))*(cos(cosine_dist)*cos(cosine_dist))) / (3*2) ) ) FROM `'$PROJECT_ID'.'$dataset_name'.'$PREDICTED_results_TABLE_name2'` WHERE member_casual = "member") AS SWC_centroid
     FROM `'$PROJECT_ID'.'$dataset_name'.'$PREDICTED_results_TABLE_name2'`
     )
     SELECT *,
-    (CASE WHEN lifestyle = 'Cardio Enthusiast' THEN 1 WHEN lifestyle = 'Athlete' THEN 2 
-WHEN lifestyle = 'Weight Trainer' THEN 3 WHEN lifestyle = 'Sedentary' THEN 4 END ) AS feat_recommendation FROM tabtemp'
-
-
+    (CASE WHEN (trip_time_norm - SWC_centroid) > (birthyear_INTfill_norm - SWC_centroid) THEN "trip_time" WHEN (trip_time_norm - SWC_centroid) > (rideable_type_INTfill_norm - SWC_centroid) THEN "trip_time" WHEN (birthyear_INTfill_norm - SWC_centroid) > (trip_time_norm - SWC_centroid) THEN "birthyear" WHEN (birthyear_INTfill_norm - SWC_centroid) > (rideable_type_INTfill_norm - SWC_centroid) THEN "birthyear" WHEN (rideable_type_INTfill_norm - SWC_centroid) > (trip_time_norm - SWC_centroid) THEN "rideable_type" WHEN (rideable_type_INTfill_norm - SWC_centroid) > (birthyear_INTfill_norm - SWC_centroid) THEN "rideable_type" END) AS feat_recommendation FROM tabtemp'
 
 
 fi
@@ -1352,7 +1373,29 @@ fi
 
 # ---------------------------------------------
 
+# Verify the recommendations : 
+export output_table_name_to_plot=$(echo "table_to_plot_in_Looker")
 
+export val=$(echo "X0")
+
+if [[ $val == "X0" ]]
+then 
+	bq rm -t $PROJECT_ID:$dataset_name.$output_table_name_to_plot
+
+	bq query \
+            --location=$location \
+            --destination_table $PROJECT_ID:$dataset_name.$output_table_name_to_plot \
+            --allow_large_results \
+            --use_legacy_sql=false \
+    'SELECT member_casual, 
+    IF(member_casual = "casual", feat_recommendation, "no_marketing") AS recommendations, 
+    COUNT(*) AS counts_of_recommendations,
+    IF(member_casual = "casual", COUNT(*)/(SELECT COUNT(*) FROM `'$PROJECT_ID'.'$dataset_name'.'$PREDICTED_results_TABLE_name3'` WHERE member_casual="casual"), COUNT(*)/(SELECT COUNT(*) FROM `'$PROJECT_ID'.'$dataset_name'.'$PREDICTED_results_TABLE_name3'` WHERE member_casual="member")) AS percentage
+    FROM `'$PROJECT_ID'.'$dataset_name'.'$PREDICTED_results_TABLE_name3'`
+    GROUP BY member_casual, recommendations'
+
+
+fi
 
 # ---------------------------------------------
 
