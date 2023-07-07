@@ -1,0 +1,83 @@
+
+
+-- ******************
+-- Calculating t-critical for the ONE-SAMPLED t_statistic/z_score: (samp_mean - pop_mean)/(samp_std/sqrt(samp_len))
+-- Comparing one population sample with respect to the population mean
+-- ******************
+-- T-statistic and Z-score comparing each category with respect to the population mean
+-- T-test: https://www.statology.org/t-score-p-value-calculator/
+-- Z-score : https://www.socscistatistics.com/pvalues/normaldistribution.aspx
+
+
+
+
+
+-- ******************
+-- STEP 1: Calculate the t-statistic/z-score vector which is the CDF
+-- ******************
+
+t_OR_Z = ((df_samp1 - df_samp2) - (df_samp1_mean - df_samp2_mean)) / sqrt( ((df_samp1_std**2)/df_samp1_len) + ((df_samp2_std**2)/df_samp2_len) )
+
+
+-- OUTPUT: t_OR_Z
+
+
+-- ******************
+-- STEP 1: Calculate the  pdf (the normal distribution OR the probability density function)
+-- ******************
+# Calculate the pdf (the normal distribution OR the probability density function)
+pdf0 = ((1/(np.sqrt(2*math.pi)*t_OR_Z.std())))*np.exp(-((t_OR_Z - t_OR_Z.mean())**2)/(2*t_OR_Z.std()**2))
+
+# Calculate the significance value (p-value)
+p_value = np.sum([pdf0[ind] for ind, i in enumerate(t_Z_vec) if abs(i) > abs(t_Z_critical)])
+
+
+-- OUTPUT: p_value
+
+
+# ---------------------------
+
+ONE_SAMPLE_TESTS_t_and_zstatistic_of_NUMfeat_perCategory
+    # Inputs:
+    # $1 = location
+    # $2 = samp1_FEAT_name (NUMERICAL feature per category to test statistical significance with the mean)
+    # $3 = PROJECT_ID
+    # $4 = dataset_name
+    # $5 = TABLE_name
+    # $6 = category_FEAT_name (CATEGORICAL feature)
+
+
+ONE_SAMPLE_TESTS_t_and_zstatistic_of_CATfeat_perCategory
+    # Inputs:
+    # $1 = location
+    # $2 = samp1_FEAT_name (CATEGORICAL feature per category to test statistical significance with the mean)
+    # $3 = PROJECT_ID
+    # $4 = dataset_name
+    # $5 = TABLE_name
+    # $6 = category_FEAT_name (CATEGORICAL feature)
+
+
+TWO_SAMPLE_TESTS_zstatistic_perbinarycategory
+    # Inputs:
+    # $1 = location
+    # $2 = samp1_FEAT_name
+    # $3 = PROJECT_ID
+    # $4 = dataset_name
+    # $5 = TABLE_name
+    # $6 = category_FEAT_name
+    # $7 = category_FEAT_name_VAR1
+    # $8 = category_FEAT_name_VAR2
+
+
+TWO_SAMPLE_TESTS_zstatistic
+    # Inputs:
+    # $1 = location
+    # $2 = samp1_FEAT_name
+    # $3 = samp2_FEAT_name
+    # $4 = PROJECT_ID
+    # $5 = dataset_name
+    # $6 = TABLE_name
+    
+    
+# ---------------------------
+

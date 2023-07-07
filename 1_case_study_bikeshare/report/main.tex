@@ -112,7 +112,11 @@ In summary, the project/business objective was SATISFIED because the baseline so
 
 The project can be improved by collecting more data from casual users and women; the dataset was statistically significantly (one sample z-test: $p < 0.05$) biased to male members. Higher prediction accuracy between members and casual users or better detection of outliers, maybe possible if demographic samples were equally represented.
 
-The code and results for this case study are at \url{https://github.com/j622amilah/automatic_GCP_ingestion}. I hope to publish the GCP bigquery statistic library and the GCP bigquery case study library, such that others can use the Google Cloud Platform tools in an automated  manner.
+The code and results for this case study are at 
+\\
+\url{https://github.com/j622amilah/Case_Studies/tree/main/1_case_study_bikeshare} and 
+\\
+\url{https://github.com/j622amilah/GCP_ingestion_analysis_tools}. I hope to publish the GCP bigquery statistic library and the GCP bigquery case study library, such that others can use the Google Cloud Platform tools in an automated  manner.
 
 
 \section{Business Objective/Ask}
@@ -163,7 +167,7 @@ The bikeshare data from the AWS bucket was assumed to have data integrity, credi
 
 \subsection{Methodology/Process}
 % Should document data cleaning and manipulation steps
-An automatic GCP ingestion program was written in bash (\url{https://github.com/j622amilah/automatic_GCP_ingestion}) that: 
+An automatic GCP ingestion program was written in bash that: 
 \begin{enumerate}
 \item Downloaded the data from the public bucket using the AWS SDK,
 \item organized/unzipped the zip files into three folders (csvdata, remaining$\_$files, zipdata),
@@ -271,7 +275,7 @@ EQN  =  2q^{2} + 2q^{2} + 2q^{2} + \ldots = n \cdot 2q^{2}
 Solve for q
 
 \begin{equation}
-q  =  \sqrt{ \frac{ EQN }{ n \cdot 2q^{2} }} = \sqrt{ \frac{ \frac{ \sum^{n-1}_{i=0} (B_i)^{2}} { (\sum^{n-1}_{i=0} B_i)^{2} } cos^{2} \theta }{ n \cdot 2q^{2} }}
+q  =  \sqrt{ \frac{ EQN }{ n \cdot 2 }} = \sqrt{ \frac{ \frac{ \sum^{n-1}_{i=0} (B_i)^{2}} { (\sum^{n-1}_{i=0} B_i)^{2} } cos^{2} \theta }{ n \cdot 2 }}
 \end{equation}
 
 In GCP, q will be calculated per row/sample so the SWC$\_$centroid for the member centroid is the average of all the rows when member$\_$casual is equal to member.

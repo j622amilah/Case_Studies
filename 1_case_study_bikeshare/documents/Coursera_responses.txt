@@ -1,0 +1,19 @@
+
+
+
+Google Data Analytics Capstone: Complete a Case Study
+Semaine 2
+Case Study 3: Follow your own case study path
+
+
+
+Google Data Analytics Capstone: Complete a Case Study
+Semaine 2
+Optional: Share your portfolio with others
+The bikeshare case study is located at https://github.com/j622amilah/Case_Studies/tree/main/1_case_study_bikeshare and the GCP ingestion library is located at https://github.com/j622amilah/GCP_ingestion_analysis_tools. It was a good project to understand how to upload files in bulk, organize an SQL table, query an SQL table, and perform outlier detection analysis for kmeans.
+
+
+Google Data Analytics Capstone: Complete a Case Study
+Semaine 4
+Connect with Google Data Analytics Certificate graduates
+I enjoyed learning about the Google Cloud Platform bigquery command line tools. I also enjoyed learning about SQL and R, the two programs are important to understand to have a competent level to analysis data. I am looking forward to practicing how to perform case studies quickly, as I wrap up the program. The bikeshare case study took a little over a month to complete, but now that I have some automated tools in place I hope to be able to perform case studies quickly; I hope to use this case study to win work opportunities on Upwork.

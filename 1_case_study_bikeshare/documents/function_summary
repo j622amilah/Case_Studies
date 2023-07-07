@@ -1,0 +1,180 @@
+---------------------------
+# Modules
+---------------------------
+
+initial_setup
+    # Inputs:  
+    # 2 csv files
+
+# ***** OUTPUT [file_list, tot_header] *****
+
+---------------------------
+
+clean_csv_header
+    # Inputs:  
+    # $1 = $filename
+    
+    # ***** OUTPUT [dummy_name] *****
+    
+---------------------------
+
+delete_temp_files
+
+header_match_count_per_file
+temp
+tempcount
+res
+htemp
+sim_float
+sim_int
+uqtemp
+header2
+filetemp
+
+---------------------------
+
+word2substrs
+
+# Inputs:  
+        # $1 = f_row
+
+# ***** OUTPUT [res created**] *****
+
+---------------------------
+
+model_evaluation
+
+    # Inputs:  
+    # $1 = $f_row                         # environmental variable (ie: ride_id from header2 file)
+    # $2 = $header_reduced_list           # environmental variable (ie: ride_id,rideable_type,started_at from tot_header file)
+    # $3 = $header_count_list_reduced     # environmental variable (ie: 89,34,29 via substring_evaluation)
+
+# ***** OUTPUT [filetemp created**] *****
+
+---------------------------
+
+substring_evaluation
+
+    # Inputs:  
+    # $1 = $f_row               # environmental variable (ie: ride_id from header2 file)
+    # $2 = tot_header           # file (ie: ride_id \n rideable_type \n started_at)
+
+    # ***** OUTPUT : [header_reduced, tempcount] *****
+
+substring_evaluation header2 tot_header
+similarity_assignment
+---------------------------
+
+(global function)
+header_file_not_an_exact_match
+        # Inputs:  
+        # $1 = header1  # environmental variable (ie: ride_id,rideable_type,started_at)
+        # $2 = header2  # environmental variable (ie: ride_id,rideable_type,started_at)
+        # tot_header  # file (ie: ride_id,rideable_type,started_at)
+
+# ***** OUTPUT [filetemp, header_reduced] *****
+
+---------------------------
+
+similarity_assignment
+
+    # Inputs:  
+    # $1 = header2  # file (ie: ride_id \n rideable_type \n started_at)
+    # $2 = tot_header  # file (ie: ride_id \n rideable_type \n started_at)
+
+    # ***** OUTPUT [filetemp] *****
+
+---------------------------
+
+colAselection_colBoutput
+
+
+    echo $rowdes > rowdes
+    # return $rowdes
+    # ***** OUTPUT [rowdes] *****
+    
+---------------------------
+
+get_to_replace_assignment
+
+    # Inputs:
+    # $1 = $rows_that_repword_appear
+    # $2 = $repword
+    # $3 = $maxvalue
+    # $4 = $count
+    # filetemp
+        
+# ***** OUTPUT : $to_replace_assignment *****
+
+echo $to_replace_assignment > to_replace_assignment
+#return $to_replace_assignment
+    
+---------------------------
+
+get_modelscores_for_repword
+
+        # Inputs:  
+        # $1 = filetemp
+        # $2 = $rows_that_repword_appear
+
+# ***** OUTPUT : $modelscores *****
+
+---------------------------
+
+modify_filetemp_header2
+          
+        # Inputs:  
+        # $1 = $repword
+        # header2  # file (ie: ride_id\nrideable_type\nstarted_at)
+        # filetemp
+        
+modify_filetemp_header2 $repword 
+
+# ***** OUTPUT [filetemp] *****
+        
+to_replace_assignment
+        
+        
+        
+        
+        
+        
+---------------------------
+# Extra NOTES
+---------------------------
+
+0. find unique items in [header assignment=column2 of filetemp] list
+1. [while] compare the unique item list to [header assignment=column2 of filetemp] : if they are different it means that there are repeating values in [header assignment=column2 of filetemp] and we need to reassign these items
+
+2. Get list of items that repeat (filedump)
+3. [for repword] Do a loop for each repeating word
+
+4. Find rows in filetemp column2 that match repword (rows_that_repword_appear)
+5. Find the [max of model_score across all repword rows] of filetemp (maxvalue)
+6. Check if the max model_score repeats (max_list, count)
+    - if the max model_score repeats : decide based on minimum lexical count difference
+        - for loop over rows_that_repword_appear: 
+            - find [max of model_score per row] (maxscore=column 4)
+            - if the [max of model_score per row] is equal to [max of model_score across all repword rows] calculate the minimum lexical count difference (diff)
+            - record the row that the difference was calculated [diffrow]
+            - construct a matrix of these values: difftemp=[diff difftemp]
+            - find the minimuim difference across the matrix (all repeating choices) [min_lex_cnt_diff]
+            - Find the desired row in difftemp where the minimum difference occurs [rowdes]
+            - Get the to_replace word with the desired row [to_replace]
+            
+    - if the max model_score does not repeat : select the maximum model_score row as the assignment, remove assignment from other rows
+        - find repword in column 2 and output the column 1 value [to_replace=column1 value]
+
+7. Modify filetemp : replace 
+
+
+Goal : the remaining items in filetemp should be those that are left over from [count>1] condition, because they need to be re-evaluated by the model
+    - yes, so eventually there should be nothing in filetemp
+
+---------------------------------------------
+        
+
+        
+        
+        
+        
