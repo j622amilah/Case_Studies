@@ -1,37 +1,50 @@
 #!/bin/bash
 
-# cd /home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study/git2/automatic_GCP_ingestion
-
-# ./step4_queries_analysis.sh
-
 
 
 clear
 
+# /home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/Case_Studies/git2/Case_Studies/1_case_study_bikeshare
+export cur_path=$(pwd)
+
+cd /home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/GCP_ingestion_analysis_tools/git2/GCP_ingestion_analysis_tools
+
+source ./GCP_bigquery_case_study_library.sh
+source ./GCP_bigquery_statistic_library.sh
+source ./GCP_common_header.sh
+
+cd $cur_path
+
+
 
 
 # ---------------------------
-# Handmade Query Functions
+# Functions START
 # ---------------------------
+
 
 join_multiple_tables(){
 	
-	# ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
-     export TABLE_name0=$(echo "bikeshare_table0")
+	# dailyActivity_merged.csv [Id, ActivityDate, TotalSteps, TotalDistance, TrackerDistance, LoggedActivitiesDistance, VeryActiveDistance, ModeratelyActiveDistance, LightActiveDistance, SedentaryActiveDistance, VeryActiveMinutes, FairlyActiveMinutes,LightlyActiveMinutes,SedentaryMinutes, Calories]
+	
+	# minuteCaloriesWide_merged.csv
+#Id,ActivityHour,Calories00,Calories01,Calories02,Calories03,Calories04,Calories05, Calories06,Calories07,Calories08,Calories09,Calories10,Calories11,Calories12, Calories13,Calories14,Calories15,Calories16,Calories17,Calories18,Calories19,Calories20,
+Calories21,Calories22,Calories23,Calories24,Calories25,Calories26,Calories27,Calories28,
+Calories29,Calories30,Calories31,Calories32,Calories33,Calories34,Calories35,Calories36,
+Calories37,Calories38,Calories39,Calories40,Calories41,Calories42,Calories43,Calories44,
+Calories45,Calories46,Calories47,Calories48,Calories49,Calories50,Calories51,Calories52,
+Calories53,Calories54,Calories55,Calories56,Calories57,Calories58,Calories59
      
-     # trip_id, starttime, stoptime, bikeid, tripduration, start_station_id, start_station_name, end_station_id, end_station_name, usertype, gender, birthyear
-     export TABLE_name1=$(echo "bikeshare_table1")
-     
-     export TABLE_name_join=$(echo "bikeshare_full")  # ride_id_join
+     export TABLE_name_join=$(echo "exercise_full")
 
      bq query \
             --location=$location \
             --destination_table $PROJECT_ID:$dataset_name.$TABLE_name_join \
             --allow_large_results \
             --use_legacy_sql=false \
-            'SELECT T0.ride_id, 
-            T0.rideable_type, 
-            T0.started_at, 
+            'SELECT T0.TotalSteps, 
+            T0.TotalDistance, 
+            T0.Calories, 
             T0.ended_at, 
             T0.start_station_name AS stsname_T0,
             T0.start_station_id AS ssid_T0,
@@ -54,7 +67,21 @@ join_multiple_tables(){
             T1.usertype, 
             T1.gender, 
             T1.birthyear FROM `'$PROJECT_ID'.'$dataset_name'.dailyActivity_merged` AS T0
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name1'` AS T1 ON T0.Id = T1.Id;'   
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+
+
+;'   
 
 # Try 0: More unique identifier => problem: usertype, gender, birthyear are NULL for member_casual, rideable_type, which means that the Tables just do not align. Even if I stacked the tables and made a common header they would STILL not ALIGN. problem solved, there is no corresponding data.
 # FULL JOIN `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name1'` AS T1 ON T0.ride_id = T1.trip_id

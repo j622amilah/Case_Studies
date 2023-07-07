@@ -1,15 +1,19 @@
 #!/bin/bash
 
+
+clear
+
+
 export cur_path=$(pwd)
 
 cd /home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/GCP_ingestion_analysis_tools/git2/GCP_ingestion_analysis_tools
 
 source ./GCP_bigquery_case_study_library.sh
-source ./GCP_bigquery_case_study_library.sh
+source ./GCP_bigquery_statistic_library.sh
 source ./GCP_common_header.sh
 
 cd $cur_path
-
+# cd /home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/Case_Studies/git2/Case_Studies/1_case_study_bikeshare
 
 
 
@@ -983,20 +987,6 @@ then
 fi
 
 
-# -------------------------
-# View the tables in the dataset
-# -------------------------
-# bq --location=$location ls $PROJECT_ID:$dataset_name
-
-
-
-# -------------------------
-# View the columns in a TABLE
-# -------------------------
-# export TABLE_name=$(echo "bikeshare_full")
-# export TABLE_name=$(echo "bikeshare_full_clean0")
-# export TABLE_name=$(echo "bikeshare_full_clean1")
-# VIEW_the_columns_of_a_table $location $PROJECT_ID $dataset_name $TABLE_name 
 
 
 
@@ -1187,6 +1177,9 @@ export val=$(echo "X1")
 if [[ $val == "X0" ]]
 then 
 	# Types of normalization : https://cloud.google.com/bigquery/docs/reference/standard-sql/bigqueryml-syntax-standard-scaler
+	# ML.MAX_ABS_SCALER -  range [-1, 1]
+	# ML.MIN_MAX_SCALER range [0, 1]
+	# ML.STANDARD_SCALER function scales a numerical expression using z-score.
 	
 	bq rm -t $PROJECT_ID:$dataset_name.$TABLE_name2
 	
@@ -1200,13 +1193,15 @@ then
             IF(birthyear_INT IS NULL, 1981, birthyear_INT) AS birthyear_INTfill,
             (CASE WHEN rideable_type="electric_bike" then 1 WHEN rideable_type="classic_bike" then 2 WHEN rideable_type="docked_bike" then 3 WHEN rideable_type IS NULL then 3 end) AS rideable_type_INTfill
             FROM `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name'`
+            WHERE trip_time > 0
             )
             SELECT 
-            ML.STANDARD_SCALER(trip_time) OVER() AS trip_time_norm, 
-            ML.STANDARD_SCALER(birthyear_INTfill) OVER() AS birthyear_INTfill_norm, 
-            ML.STANDARD_SCALER(rideable_type_INTfill) OVER() AS rideable_type_INTfill_norm,
+            ML.MIN_MAX_SCALER(trip_time) OVER() AS trip_time_norm, 
+            ML.MIN_MAX_SCALER(birthyear_INTfill) OVER() AS birthyear_INTfill_norm, 
+            ML.MIN_MAX_SCALER(rideable_type_INTfill) OVER() AS rideable_type_INTfill_norm,
             IF(member_casual = "member", 0, 1) AS label
-            FROM temptab;'  
+            FROM temptab
+            WHERE birthyear_INTfill > (2023-100) AND birthyear_INTfill < (2023-18) ;'  
 fi
 
 
@@ -1214,13 +1209,13 @@ fi
 # -------------------------
 # Test Train split
 # -------------------------
-export label_name=$(echo "member_casual")
+export label_name=$(echo "label")
 export train_split=$(echo "0.75")
 export TRAIN_TABLE_name=$(echo "TRAIN_TABLE_name")
 export TESTING_TABLE_name=$(echo "TESTING_TABLE_name")
 
 
-export val=$(echo "X1")
+export val=$(echo "X0")
 
 if [[ $val == "X0" ]]
 then 
@@ -1242,11 +1237,11 @@ fi
 # https://cloud.google.com/bigquery/docs/reference/standard-sql/bigqueryml-syntax-create-automl
 # detailed examples : https://cloud.google.com/bigquery/docs/logistic-regression-prediction
 
-export MODEL_name=$(echo "kmeans_model_cosine")
-export PREDICTED_results_TABLE_name=$(echo "kmeans_model_cosine_PREDICTED_results_TABLE")
+export MODEL_name=$(echo "kmeans_model_cosine_MIN_MAX_SCALER")
+export PREDICTED_results_TABLE_name=$(echo "kmeans_model_cosine_PREDICTED_results_TABLE_MIN_MAX_SCALER")
 
 
-export val=$(echo "X1")
+export val=$(echo "X0")
 
 if [[ $val == "X0" ]]
 then 
@@ -1288,7 +1283,7 @@ fi
 
 
 # Calculate accuracy using the kmeans_model_cosine_PREDICTED_results_TABLE
-export val=$(echo "X1")
+export val=$(echo "X0")
 
 if [[ $val == "X0" ]]
 then 
@@ -1310,9 +1305,9 @@ fi
 
 
 # UNNEST the kmeans predicted table results, add zero column
-export PREDICTED_results_TABLE_name2=$(echo "kmeans_model_cosine_PREDICTED_results_TABLE2")
+export PREDICTED_results_TABLE_name2=$(echo "kmeans_model_cosine_PREDICTED_results_TABLE2_MIN_MAX_SCALER")
 
-export val=$(echo "X1")
+export val=$(echo "X0")
 
 if [[ $val == "X0" ]]
 then 
@@ -1345,9 +1340,9 @@ fi
 
 
 # Calculate the recommendation using the kmeans_model_cosine_PREDICTED_results_TABLE2
-export PREDICTED_results_TABLE_name3=$(echo "kmeans_model_cosine_PREDICTED_results_TABLE3")
+export PREDICTED_results_TABLE_name3=$(echo "kmeans_model_cosine_PREDICTED_results_TABLE3_MIN_MAX_SCALER")
 
-export val=$(echo "X1")
+export val=$(echo "X0")
 
 if [[ $val == "X0" ]]
 then 	
@@ -1374,7 +1369,7 @@ fi
 # ---------------------------------------------
 
 # Verify the recommendations : 
-export output_table_name_to_plot=$(echo "table_to_plot_in_Looker")
+export output_table_name_to_plot=$(echo "table_to_plot_in_Looker_MIN_MAX_SCALER")
 
 export val=$(echo "X0")
 
@@ -1399,13 +1394,32 @@ fi
 
 # ---------------------------------------------
 
+# Go to Data Studio: https://lookerstudio.google.com/navigation/reporting
+
+# Data Connector : select BigQuery
+
+export TABLE_name=$(echo "table_to_plot_in_Looker")
+export BUCKET_name=$(echo "the_bucket0")
+
+export val=$(echo "X1")
+
+if [[ $val == "X0" ]]
+then 
+	
+	create_a_bucket $location $PROJECT_ID $BUCKET_name
+	
+	save_extract_a_table_to_a_bucket $location $PROJECT_ID $dataset_name $TABLE_name $BUCKET_name
+
+
+  
+
+fi
 
 
 # ---------------------------------------------
 
 
-
-
+            
 
 
 # ---------------------------------------------
