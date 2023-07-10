@@ -691,8 +691,6 @@ then
     
     # Get latest version of the Google Cloud CLI (does not work)
     gcloud components update
-else
-    echo "Do not setup google cloud sdk PATH"
 fi
 
 

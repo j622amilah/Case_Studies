@@ -2,6 +2,9 @@
 
 
 
+# cd /home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/Case_Studies/git2/Case_Studies/2_case_study_exercise
+
+
 clear
 
 # /home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/Case_Studies/git2/Case_Studies/1_case_study_bikeshare
@@ -25,144 +28,179 @@ cd $cur_path
 
 join_multiple_tables(){
 	
-	# dailyActivity_merged.csv [Id, ActivityDate, TotalSteps, TotalDistance, TrackerDistance, LoggedActivitiesDistance, VeryActiveDistance, ModeratelyActiveDistance, LightActiveDistance, SedentaryActiveDistance, VeryActiveMinutes, FairlyActiveMinutes,LightlyActiveMinutes,SedentaryMinutes, Calories]
+    # Inputs:
+    # $1 = location
+    # $2 = PROJECT_ID
+    # $3 = dataset_name
+    
+	# dailyActivity_merged.csv T0
+	# [Id, ActivityDate, TotalSteps, TotalDistance, TrackerDistance, LoggedActivitiesDistance, VeryActiveDistance, ModeratelyActiveDistance, LightActiveDistance, SedentaryActiveDistance, VeryActiveMinutes, FairlyActiveMinutes, LightlyActiveMinutes, SedentaryMinutes, Calories]
 	
-	# minuteCaloriesWide_merged.csv
-#Id,ActivityHour,Calories00,Calories01,Calories02,Calories03,Calories04,Calories05, Calories06,Calories07,Calories08,Calories09,Calories10,Calories11,Calories12, Calories13,Calories14,Calories15,Calories16,Calories17,Calories18,Calories19,Calories20,
-Calories21,Calories22,Calories23,Calories24,Calories25,Calories26,Calories27,Calories28,
-Calories29,Calories30,Calories31,Calories32,Calories33,Calories34,Calories35,Calories36,
-Calories37,Calories38,Calories39,Calories40,Calories41,Calories42,Calories43,Calories44,
-Calories45,Calories46,Calories47,Calories48,Calories49,Calories50,Calories51,Calories52,
-Calories53,Calories54,Calories55,Calories56,Calories57,Calories58,Calories59
+	# minuteCaloriesWide_merged.csv T1
+#Id,ActivityHour,Calories00,Calories01, Calories02, Calories03, Calories04, Calories05, Calories06, Calories07, Calories08, Calories09, Calories10, Calories11, Calories12, Calories13, Calories14, Calories15, Calories16, Calories17, Calories18, Calories19, Calories20, Calories21, Calories22, Calories23, Calories24, Calories25, Calories26, Calories27, Calories28, Calories29, Calories30, Calories31, Calories32, Calories33, Calories34, Calories35, Calories36, Calories37, Calories38, Calories39,Calories40, Calories41, Calories42, Calories43, Calories44, Calories45, Calories46, Calories47, Calories48, Calories49, Calories50, Calories51, Calories52, Calories53, Calories54, Calories55, alories56, Calories57, Calories58, Calories59]
+     
+	# dailyCalories_merged.csv T2
+	# [Id, ActivityDay, Calories]
+	
+	# minuteIntensitiesNarrow_merged.csv T3
+	# [Id, ActivityMinute, Intensity
+	
+	# dailyIntensities_merged.csv T4
+	# [Id, ActivityDay, SedentaryMinutes, LightlyActiveMinutes, FairlyActiveMinutes, VeryActiveMinutes, SedentaryActiveDistance, LightActiveDistance, ModeratelyActiveDistance, VeryActiveDistance]
+
+	# minuteIntensitiesWide_merged.csv T5
+	# Id, ActivityHour, Intensity00, Intensity01, Intensity02, Intensity03, Intensity04, Intensity05, Intensity06, Intensity07,Intensity08,Intensity09,Intensity10,Intensity11,Intensity12,Intensity13,Intensity14,Intensity15,Intensity16,Intensity17,Intensity18,Intensity19,Intensity20,Intensity21,Intensity22,Intensity23,Intensity24,Intensity25,Intensity26,Intensity27,Intensity28,Intensity29,Intensity30,Intensity31,Intensity32,Intensity33,Intensity34,Intensity35,Intensity36,Intensity37,Intensity38,Intensity39,Intensity40,Intensity41,Intensity42,Intensity43,Intensity44,Intensity45,Intensity46,Intensity47,Intensity48,Intensity49,Intensity50,Intensity51,Intensity52,Intensity53,Intensity54,Intensity55,Intensity56,Intensity57,Intensity58,Intensity59
+
+	# dailySteps_merged.csv T6
+	# Id, ActivityDay, StepTotal
+	
+	# minuteMETsNarrow_merged.csv T7
+	# [Id, ActivityMinute, METs]
+	
+	# heartrate_seconds_merged.csv T8
+	# [Id, Time, Value]
+	
+	# *** Failed to join with dailyActivity_merged
+	# minuteSleep_merged.csv T9
+	# [Id, date, value, logId]
+	
+	# hourlyCalories_merged.csv T10
+	# [Id, ActivityHour, Calories]
+	
+	# minuteStepsNarrow_merged.csv T11
+	# [Id, ActivityMinutes, Steps]
+	
+	# hourlyIntensities_merged.csv T12
+	# [Id, ActivityHour, TotalIntensity, AverageIntensity]
+	
+	# minuteStepsWide_merged.csv T13
+	# [Id, ActivityHour, Steps00 to Steps59]
+	
+	# hourlySteps_merged.csv T14
+	# Id, ActivityHour, StepTotal]
+	
+	# *** Failed to join with dailyActivity_merged
+	# sleepDay_merged.csv T15
+	# Id, SleepDay, TotalSleepRecords, TotalMinutesAsleep, TotalTimeInBed]
+	
+	# minuteCaloriesNarrow_merged.csv T16 
+	# Id, ActivityMinute, Calories]
+	
+	# weightLogInfo_merged.csv T17
+	# [Id, Date, WeightKg, WeightPounds, Fat, BMI, IsManualReport, LogId]
+	
+	# export x=$(echo "weightLogInfo_merged")
+	# VIEW_the_columns_of_a_table $location $PROJECT_ID $dataset_name $x
+     
+	# T1.ActivityHour AS hour_calories,
+	# T2.ActivityDay AS day_calories,
+        # T3.ActivityMinute min_intensity, 
+        # T3.Intensity,
+        # T7.METs,
+        
+     #INNER JOIN `'$2'.'$3'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
+     #INNER JOIN `'$2'.'$3'.dailyCalories_merged` AS T2 ON T0.Id = T2.Id
+     #INNER JOIN `'$2'.'$3'.minuteIntensitiesNarrow_merged` AS T3 ON T0.Id = T3.Id
+     #INNER JOIN `'$2'.'$3'.minuteMETsNarrow_merged` AS T7 ON T0.Id = T7.Id
+     
+     bq rm -t $2:$3.exercise_full
      
      export TABLE_name_join=$(echo "exercise_full")
 
      bq query \
-            --location=$location \
-            --destination_table $PROJECT_ID:$dataset_name.$TABLE_name_join \
+            --location=$1 \
+            --destination_table $2:$3.$TABLE_name_join \
             --allow_large_results \
             --use_legacy_sql=false \
-            'SELECT T0.TotalSteps, 
+            'SELECT 
+            T0.ActivityDate, 
+            T0.TotalSteps, 
             T0.TotalDistance, 
-            T0.Calories, 
-            T0.ended_at, 
-            T0.start_station_name AS stsname_T0,
-            T0.start_station_id AS ssid_T0,
-            T0.end_station_name AS esname_T0,
-            T0.end_station_id AS esid_T0,
-            T0.start_lat, 
-            T0.start_lng, 
-            T0.end_lat, 
-            T0.end_lng, 
-            T0.member_casual,
-            T1.trip_id, 
-            T1.starttime, 
-            T1.stoptime, 
-            T1.bikeid, 
-            T1.tripduration, 
-            T1.start_station_id AS ssid_T1, 
-            T1.start_station_name AS stsname_T1, 
-            T1.end_station_id AS esid_T1, 
-            T1.end_station_name AS esname_T1, 
-            T1.usertype, 
-            T1.gender, 
-            T1.birthyear FROM `'$PROJECT_ID'.'$dataset_name'.dailyActivity_merged` AS T0
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-FULL JOIN `'$PROJECT_ID'.'$dataset_name'.minuteCaloriesWide_merged` AS T1 ON T0.Id = T1.Id
-
-
-;'   
-
-# Try 0: More unique identifier => problem: usertype, gender, birthyear are NULL for member_casual, rideable_type, which means that the Tables just do not align. Even if I stacked the tables and made a common header they would STILL not ALIGN. problem solved, there is no corresponding data.
-# FULL JOIN `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name1'` AS T1 ON T0.ride_id = T1.trip_id
-# JOIN ON ride_id=trip_id DOES NOTHING because TABLE0 (member_casual, rideable_type) does not align with TABLE1 (usertype, gender, birthyear)
-
-# Try 1: Less unique identifier (does not work)
-# FULL JOIN `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name1'` AS T1 ON T0.start_station_id = T1.start_station_id
-# FULL JOIN `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name1'` AS T1 ON T0.end_station_id = T1.end_station_id
-# FULL JOIN `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name1'` AS T1 ON T0.ride_id = T1.bikeid
+            T0.VeryActiveDistance,
+            T0.ModeratelyActiveDistance, 
+            T0.LightActiveDistance, 
+            T0.SedentaryActiveDistance, 
+            T0.VeryActiveMinutes,
+            T0.FairlyActiveMinutes,
+            T0.LightlyActiveMinutes,
+            T0.SedentaryMinutes,
+            T0.Calories,
+            T8.Value AS heartrate_time,
+            T8.Value AS heartrate,
+            T15.TotalTimeInBed AS sleep_duration, 
+            T17.WeightKg,
+            T17.WeightPounds,
+            T17.Fat,
+            T17.BMI
+            FROM `'$2'.'$3'.dailyActivity_merged` AS T0
+	 JOIN `'$2'.'$3'.heartrate_seconds_merged` AS T8 ON T0.Id = T8.Id
+	 JOIN `'$2'.'$3'.sleepDay_merged` AS T15 ON T0.Id = T15.Id
+	 JOIN `'$2'.'$3'.weightLogInfo_merged` AS T17 ON T0.Id = T17.Id;'   
 
 }
 
+# When you create a query by using a JOIN, consider the order in which you are merging the data. The GoogleSQL query optimizer can determine which table should be on which side of the join, but it is still recommended to order your joined tables appropriately. As a best practice, place the table with the largest number of rows first, followed by the table with the fewest rows, and then place the remaining tables by decreasing size.
+
+# When you have a large table as the left side of the JOIN and a small one on the right side of the JOIN, a broadcast join is created. A broadcast join sends all the data in the smaller table to each slot that processes the larger table. It is advisable to perform the broadcast join first.
+
+
 # ---------------------------
 
-CLEAN_TABLE_exercise_full_clean0(){
+# WORKED
+join_2_tables(){
 	
-    export TABLE_name=$(echo "bikeshare_full")
-    
-    export TABLE_name_clean_prev=$(echo "bikeshare_full_clean0") 
-    
-    export TABLE_name_clean=$(echo "bikeshare_full_clean1") 
-    
+    # Inputs:
+    # $1 = location
+    # $2 = PROJECT_ID
+    # $3 = dataset_name
+    # $4 = OUTPUT_TABLE_name
+
      bq query \
-            --location=$location \
-            --destination_table $PROJECT_ID:$dataset_name.$TABLE_name_clean \
+            --location=$1 \
+            --destination_table $2:$3.$4 \
             --allow_large_results \
             --use_legacy_sql=false \
-    'WITH temptable AS ( 
-    SELECT fin_trip_ID,
-    rideable_type,
-    CAST(fin_starttime AS TIMESTAMP) AS start_TIMESTAMP,
-    CAST(fin_endtime AS TIMESTAMP) AS end_TIMESTAMP,
-    fin_stsname,
-    fin_stsID,
-    fin_esname,
-    fin_esID,
-    IF(start_lat_NUM > end_lat_NUM, start_lat_NUM, end_lat_NUM) AS MAX_LAT,
-    IF(start_lat_NUM < end_lat_NUM, start_lat_NUM, end_lat_NUM) AS MIN_LAT,
-    IF(start_lng_NUM > end_lng_NUM, start_lng_NUM, end_lng_NUM) AS MAX_LONG,
-    IF(start_lng_NUM < end_lng_NUM, start_lng_NUM, end_lng_NUM) AS MIN_LONG,
-    member_casual AS member_casual_T0,
-    bikeid,
-    tripduration,
-    (CASE WHEN usertype="Customer" then "casual" WHEN usertype="Subscriber" then "member" WHEN usertype="Dependent" then "casual" end) AS member_casual_T1,
-    gender,
-    birthyear
-     FROM `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name_clean_prev'`
-     WHERE member_casual IS NOT NULL OR rideable_type IS NOT NULL OR gender = "Male" OR gender = "Female"
-     )
-     SELECT fin_trip_ID,
-     rideable_type,
-     IF(CAST(tripduration AS INTEGER) > TIMESTAMP_DIFF(end_TIMESTAMP, start_TIMESTAMP, SECOND), CAST(tripduration AS INTEGER), TIMESTAMP_DIFF(end_TIMESTAMP, start_TIMESTAMP, SECOND)) AS trip_time,
-     fin_stsname,
-    fin_stsID,
-    fin_esname,
-    fin_esID,
-    SAFE_CAST(ABS(POWER(MAX_LAT-MIN_LAT, 2) + POWER(MAX_LONG-MIN_LONG, 2)) AS FLOAT64) AS trip_distance,
-    COALESCE(member_casual_T0, member_casual_T1) AS member_casual,
-    CAST(bikeid AS INTEGER) AS bikeid_INT,
-    gender,
-    CAST(birthyear AS INTEGER) AS birthyear_INT
-     FROM temptable
-     WHERE member_casual_T0 IS NOT NULL OR rideable_type IS NOT NULL OR gender = "Male" OR gender = "Female";'
+            'SELECT 
+            T0.Id,
+            T0.ActivityDate, 
+            T0.TotalSteps, 
+            T0.TotalDistance, 
+            T0.VeryActiveDistance,
+            T0.ModeratelyActiveDistance, 
+            T0.LightActiveDistance, 
+            T0.SedentaryActiveDistance, 
+            T0.VeryActiveMinutes,
+            T0.FairlyActiveMinutes,
+            T0.LightlyActiveMinutes,
+            T0.SedentaryMinutes,
+            T0.Calories,
+            T8.Value AS heartrate_time,
+            T8.Value AS heartrate,
+            T15.TotalTimeInBed AS sleep_duration
+            FROM `'$2'.'$3'.dailyActivity_merged` AS T0
+INNER JOIN `'$2'.'$3'.heartrate_seconds_merged` AS T8 ON T0.Id = T8.Id;'   
 
 }
-
-# ---------------------------
-
-
-# ---------------------------
+    
 
 
 # ---------------------------
 
+
 # ---------------------------
+
+
+
+
+    
+# ---------------------------
+    
+
 
 
 # ---------------------------
 # Functions END
 # ---------------------------
-
 
 
 
@@ -218,20 +256,9 @@ else
     # gcloud auth list
 fi
 
-
-
-
 # ---------------------------------------------
-# Make random number for creating variable or names
-# ---------------------------------------------
-if [[ $val == "X1" ]]
-then 
-    let "randomIdentifier=$RANDOM*$RANDOM"
-else
-    let "randomIdentifier=202868496"
-fi
 
-# ---------------------------------------------
+
 
 
 
@@ -374,22 +401,19 @@ fi
 
 
 # ---------------------------------------------
-# Download data from datasource (Kaggle API)
+# Download data from datasource
 # ---------------------------------------------
-# https://www.kaggle.com/docs/api
-# 0. go to kaggle - User icon - account - scroll down to API section - telechargez kaggle.json
+export val=$(echo "X1")
 
-# 1. bougez kaggle.json à la path du script
-# mv /home/oem2/Documents/PROGRAMMING/kaggle.json /home/oem2/.kaggle/kaggle.json
-# chmod 600 /home/oem2/.kaggle/kaggle.json
+if [[ $val == "X0" ]]
+then 
+	export path_outside_of_ingestion_folder=$(echo "/home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/Case_Studies/git2/Case_Studies/2_case_study_exercise")
+	export NAME_OF_DATASET=$(echo "arashnic/fitbit")
+	
+	download_data_Kaggle $path_outside_of_ingestion_folder $NAME_OF_DATASET
+fi
 
-# Prepare folder
-# cd /home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study
-# mkdir exercise_casestudy
-# cd /home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study/exercise_casestudy
-
-# Run the API
-# kaggle datasets download -d NAME_OF_DATASET
+# OUTPUT : Creates a folder called downloaded_files
 
 
 
@@ -397,57 +421,84 @@ fi
 # ---------------------------------------------
 # Organize zip files
 # ---------------------------------------------
-# export path_folder_2_organize=$(echo "/home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study/exercise_casestudy")
+export val=$(echo "X1")
 
-# export ingestion_folder=$(echo "ingestion_folder_exercise")
+if [[ $val == "X0" ]]
+then 
+	export path_folder_2_organize=$(echo "/home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/Case_Studies/git2/Case_Studies/2_case_study_exercise")
 
-# export path_outside_of_ingestion_folder=$(echo "/home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study")
+	export ingestion_folder=$(echo "ingestion_folder_exercise")
 
-# organize_zip_files_from_datasource_download $path_folder_2_organize $ingestion_folder $path_outside_of_ingestion_folder
+	export path_outside_of_ingestion_folder=$(echo "/home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study")
+
+	organize_zip_files_from_datasource_download $path_folder_2_organize $ingestion_folder $path_outside_of_ingestion_folder
+
+fi
 
 
 
 # ---------------------------------------------
 # Upload csv files from the PC to GCP
 # ---------------------------------------------
-# ******* CHANGE *******
-# export cur_path=$(echo "/home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study/ingestion_folder_exercise/csvdata")
-# ******* CHANGE *******
+export val=$(echo "X1")
 
-# echo "cur_path"
-# echo $cur_path
-    
-# upload_csv_files $location $cur_path $dataset_name
+if [[ $val == "X0" ]]
+then 
+	# ******* CHANGE *******
+	export cur_path=$(echo "/home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study/ingestion_folder_exercise/csvdata")
+	# ******* CHANGE *******
 
+	echo "cur_path"
+	echo $cur_path
+	    
+	upload_csv_files $location $cur_path $dataset_name
 
-
-# -------------------------
-# Join the TABLES 
-# -------------------------
-
-# TO DO
-
-# join_multiple_tables
-
+fi
 
 
 
 
 # -------------------------
-# View the tables in the dataset
+# Get table info
 # -------------------------
-# bq --location=$location ls $PROJECT_ID:$dataset_name
 
+
+export TABLE_name=$(echo "exercise_full")
+
+export val=$(echo "X1")
+
+if [[ $val == "X0" ]]
+then 
+	bq query \
+		    --location=$location \
+		    --allow_large_results \
+		    --use_legacy_sql=false \
+	    'SELECT COUNT(*)
+	     FROM `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name'`;'
+
+
+
+	VIEW_the_columns_of_a_table $location $PROJECT_ID $dataset_name $TABLE_name
+fi
 
 
 
 # -------------------------
-# View the columns in a TABLE
+# Join the TABLES : logic of joining large tables
 # -------------------------
-# export TABLE_name=$(echo "bikeshare_full")
-# export TABLE_name=$(echo "bikeshare_full_clean0")
-# export TABLE_name=$(echo "bikeshare_full_clean1")
-# VIEW_the_columns_of_a_table $location $PROJECT_ID $dataset_name $TABLE_name 
+
+
+export OUTPUT_TABLE_name=$(echo "exercise_2tables_full")
+
+export val=$(echo "X1")
+
+if [[ $val == "X0" ]]
+then 
+	join_2_tables $location $PROJECT_ID $dataset_name $OUTPUT_TABLE_name
+	
+fi
+
+
 
 
 
@@ -455,7 +506,119 @@ fi
 # -------------------------
 # Initially Clean the TABLE :  Identify the main features for the analysis
 # -------------------------
-# CLEAN_TABLE_exercise_full_clean0
+
+export OUTPUT_TABLE_name=$(echo "exercise_full_clean0") 
+	
+bq rm -t $PROJECT_ID:$dataset_name.$OUTPUT_TABLE_name
+
+export val=$(echo "X1")
+
+if [[ $val == "X0" ]]
+then 
+	
+	
+	# Partition the table by Id, ActivityDate
+	# Id     | ActivityDate | TotalSteps |  TotalDistance   | VeryActiveDistance | ModeratelyActiveDistance | LightActiveDistance | SedentaryActiveDistance | VeryActiveMinutes | FairlyActiveMinutes | LightlyActiveMinutes | SedentaryMinutes | Calories | heartrate_time | heartrate 
+     bq query \
+            --location=$location \
+            --destination_table $PROJECT_ID:$dataset_name.$OUTPUT_TABLE_name \
+            --allow_large_results \
+            --use_legacy_sql=false \
+    'SELECT Id, 
+    ActivityDate,
+    AVG(TotalSteps) AS mean_steps, 
+    AVG(TotalDistance) AS mean_total_distance,
+    AVG(VeryActiveDistance) AS mean_active_distance,
+    AVG(ModeratelyActiveDistance) AS mean_moderateactive_distance,
+    AVG(LightActiveDistance) AS mean_lightactive_distance,
+    AVG(SedentaryActiveDistance) AS mean_sedentary_distance,
+    AVG(FairlyActiveMinutes) AS mean_fairlyactive_distance,
+    AVG(LightlyActiveMinutes) AS mean_light_distance,
+    AVG(Calories) AS mean_calories,
+    AVG(heartrate) AS mean_hr
+    FROM `'$PROJECT_ID'.'$dataset_name'.exercise_2tables_full` 
+GROUP BY Id, ActivityDate
+ORDER BY Id, ActivityDate;'
+
+fi
+
+
+
+# -------------------------
+# Join the TABLES : 
+# -------------------------
+export OUTPUT_TABLE_name=$(echo "exercise_2tables_full2")
+
+bq rm -t $PROJECT_ID:$dataset_name.$OUTPUT_TABLE_name
+
+export val=$(echo "X1")
+
+if [[ $val == "X0" ]]
+then 
+	bq query \
+            --location=$location \
+            --destination_table $PROJECT_ID:$dataset_name.$OUTPUT_TABLE_name \
+            --allow_large_results \
+            --use_legacy_sql=false \
+            'SELECT 
+            T0.Id,
+            T0.ActivityDate, 
+            T0.mean_steps, 
+            T0.mean_total_distance,
+            T0.mean_active_distance,
+            T0.mean_moderateactive_distance,
+            T0.mean_lightactive_distance,
+            T0.mean_sedentary_distance,
+            T0.mean_fairlyactive_distance,
+            T0.mean_light_distance,
+            T0.mean_calories,
+            T0.mean_hr,
+            T15.TotalTimeInBed AS sleep_duration,
+            FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean0` AS T0
+FULL JOIN `'$PROJECT_ID'.'$dataset_name'.sleepDay_merged` AS T15 ON T0.Id = T15.Id;'   
+	
+fi
+
+
+# -------------------------
+# Clean the TABLE :  Identify the main features for the analysis
+# -------------------------
+
+export OUTPUT_TABLE_name=$(echo "exercise_full_clean1") 
+	
+bq rm -t $PROJECT_ID:$dataset_name.$OUTPUT_TABLE_name
+
+export val=$(echo "X0")
+
+if [[ $val == "X0" ]]
+then 
+	
+     bq query \
+            --location=$location \
+            --destination_table $PROJECT_ID:$dataset_name.$OUTPUT_TABLE_name \
+            --allow_large_results \
+            --use_legacy_sql=false \
+    'SELECT Id, 
+    ActivityDate,
+    AVG(mean_steps) AS mean_steps, 
+    AVG(mean_total_distance) AS mean_total_distance,
+    AVG(mean_active_distance) AS mean_active_distance,
+    AVG(mean_moderateactive_distance) AS mean_moderateactive_distance,
+    AVG(mean_lightactive_distance) AS mean_lightactive_distance,
+    AVG(mean_sedentary_distance) AS mean_sedentary_distance,
+    AVG(mean_fairlyactive_distance) AS mean_fairlyactive_distance,
+    AVG(mean_light_distance) AS mean_light_distance,
+    AVG(mean_calories) AS mean_calories,
+    AVG(mean_hr) AS mean_hr,
+    COALESCE(AVG(sleep_duration),(SELECT AVG(sleep_duration) FROM `northern-eon-377721.google_analytics_exercise.exercise_2tables_full2`)) AS sleep_duration
+    FROM `northern-eon-377721.google_analytics_exercise.exercise_2tables_full2`
+    WHERE Id IS NOT NULL
+GROUP BY Id, ActivityDate
+ORDER BY Id, ActivityDate;'
+
+fi
+
+
 
 
 
@@ -478,12 +641,12 @@ fi
 
 # Statistical significance of probablistic count for CATEGORICAL features
 # *** NOT AUTOMATED, but written out *** 
-export val=$(echo "X0")
+export val=$(echo "X1")
 
 if [[ $val == "X0" ]]
 then 
     
-    export TABLE_name=$(echo "bikeshare_full_clean1")
+    export TABLE_name=$(echo "exercise_full_clean1")
     
     export TABLE_name_probcount=$(echo "bikeshare_full_clean1_CATprobcount")
 
@@ -703,8 +866,8 @@ then
     export TABLE_name_join=$(echo "bikeshare_full")
     
     # bq rm -t $PROJECT_ID:$dataset_name.$TABLE_name_join
-    bq rm -t $PROJECT_ID:$dataset_name.bikeshare_full_clean0
-    # bq rm -t $PROJECT_ID:$dataset_name.bikeshare_full_clean1
+    bq rm -t $PROJECT_ID:$dataset_name.exercise_2tables_full
+    # 
     # bq rm -t $PROJECT_ID:$dataset_name.twosample_table
     
 fi
