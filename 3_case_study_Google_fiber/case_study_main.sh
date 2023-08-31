@@ -9,7 +9,6 @@ export cur_path=$(pwd)
 cd /home/oem2/Documents/PROGRAMMING
 
 source ./GCP_bigquery_case_study_library.sh
-source ./GCP_bigquery_statistic_library.sh
 
 cd $cur_path
 # cd /home/oem2/Documents/ONLINE_COURS/Specialization_Google_Business_Intelligence_Certificat_Professionnel/case_study_Google_fiber
