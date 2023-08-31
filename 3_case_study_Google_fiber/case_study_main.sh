@@ -559,7 +559,7 @@ fi
 
 
 # -------------------------
-# Way 0 to display results : Looker
+# Display results online: Looker
 # https://cloud.google.com/bigquery/docs/looker
 # -------------------------
 export OUTPUT_TABLE_name=$(echo "repeat_call1") 
@@ -594,7 +594,7 @@ then
 	# [Step 3] Give role permissions to use the bigqueryreservation
 	# https://cloud.google.com/bigquery/docs/access-control
 	export SERVICE_ACCOUNT_ID=$(echo "looker-practice") # just make it up
-	export SERVICE_ACCOUNT_EMAIL=$(echo "j622amilah@gmail.com")
+	export SERVICE_ACCOUNT_EMAIL=$(echo "")
 	export SERVICE_ACCOUNT=$SERVICE_ACCOUNT_ID@$PROJECT_ID.iam.gserviceaccount.com
 
 	# [0] Create a custom service account (ONLY HAVE TO DO ONCE)
@@ -752,7 +752,7 @@ then
 	
 	
 	# -------------------------
-	# Connect using Looker
+	# Summary of ways to present the results online use a webapp/dashboard
 	# -------------------------
 	# If you already have a Looker model using a BigQuery dataset with a service account, in a project that is BI Engine-enabled, then no additional configuration is required. 
 	
@@ -779,9 +779,10 @@ then
 
 
 	# 	- In the end, it only explains tutorials about sending Looker data to Google Scripts 
+ 	# 	- It requires a lot more time to understand how to use the looker sdk (I finally found information that there was an sdk, need to install it and set it up)
 	# 	https://developers.looker.com/api/getting-started
 		
-
+	# -------------------------
 
 	# Way 1 : LookML
 	# LookML stands for Looker Modeling Language; it's the language that is used in Looker to create semantic data models. 
@@ -798,7 +799,13 @@ then
 	
 	# Make a connection 
 	# bq ls --connection --project_id=$PROJECT_ID --location=$location
+
+	# -------------------------
 	
+	# Way 2 : Connected Google Sheets with Google Apps Script
+	# https://cloud.google.com/bigquery/docs/connected-sheets?hl=en
+ 
+	# Go to Google Sheets - new spreadsheet - Data - Data connectors - Select BigQuery database
 	
 	# -------------------------
 
@@ -811,11 +818,6 @@ fi
 
 
 
-# -------------------------
-# Way 1 to display results : Connected Google Sheets
-# https://cloud.google.com/bigquery/docs/connected-sheets?hl=en
-# -------------------------
-# Go to Google Sheets - new spreadsheet - Data - Data connectors - Select BigQuery database
 
 
 # ---------------------------------------------
@@ -824,8 +826,9 @@ fi
 
 
 # -------------------------
-# Way 2 to display results : Dashboard
+# Way 3 to display results : Dashboard
 # https://cloud.google.com/monitoring/api/ref_v3/rest/v1/projects.dashboards/create
+# These dashboards are only for monitoring information usage on GCP, not for making a dashboard from an SQL database. 
 # -------------------------
 export OUTPUT_TABLE_name=$(echo "repeat_call1") 
 
@@ -836,7 +839,7 @@ then
 	gcloud services enable monitoring.googleapis.com 
 
 	export SERVICE_ACCOUNT_ID=$(echo "dashboard-practice") # just make it up
-	export SERVICE_ACCOUNT_EMAIL=$(echo "j622amilah@gmail.com")
+	export SERVICE_ACCOUNT_EMAIL=$(echo "")
 	export SERVICE_ACCOUNT=$SERVICE_ACCOUNT_ID@$PROJECT_ID.iam.gserviceaccount.com  
 
 	# [0] Create a custom service account (ONLY HAVE TO DO ONCE)
@@ -850,7 +853,7 @@ then
 monitoring.dashboards.create
 
 	curl 'https://monitoring.googleapis.com/v1/projects/google_business_intelligence/dashboards' \
-		--header 'Authorization: Bearer AIzaSyDb1cqZLbCZhFzmnNT3qWzDYXNaqnaSmto' \
+		--header 'Authorization: Bearer KEY' \
 		--header 'Accept: application/json' \
 		--compressed
 
@@ -873,7 +876,7 @@ then
     
     echo "---------------- Query Delete Tables ----------------"
     
-    export TABLE_name=$(echo "observation0_disasterdata")
+    export TABLE_name=$(echo "")
     
     bq rm -t $PROJECT_ID:$dataset_name.$TABLE_name
     
