@@ -118,10 +118,7 @@ if [[ $val == "X0" ]]
 then 
 
 	# Set the project region/location
-	# export location=$(echo "europe-west9-b")  # Paris
 	export location=$(echo "europe-west9")  # Paris
-	# export location=$(echo "EU")
-	# export location=$(echo "US")   # says US is the global option
 
 	dotenv set location $location
 
@@ -167,22 +164,13 @@ then
     # gcloud config list project
     
     # Set project
-    export PROJECT_ID=$(echo "northern-eon-377721")
+    export PROJECT_ID=$(echo "")
     gcloud config set project $PROJECT_ID
 
     # List DATASETS in the current project
     # bq ls $PROJECT_ID:
     # OR
     # bq ls
-
-    #  datasetId         
-    #  ------------------------ 
-    #   babynames               
-    #   city_data               
-    #   google_analytics_cours  
-    #   test       
-
-    # ------------------------
     
     dotenv set PROJECT_ID $PROJECT_ID
 
@@ -208,7 +196,7 @@ then
     # ---------------------------------------------
     # Create a new DATASET named PROJECT_ID
     # ---------------------------------------------
-    export dataset_name=$(echo "google_business_intelligence")
+    export dataset_name=$(echo "")
     bq --location=$location mk $PROJECT_ID:$dataset_name
     
     dotenv set dataset_name $dataset_name
@@ -221,7 +209,7 @@ else
     export dataset_name=$(dotenv get dataset_name)
     
     # Use existing dataset
-    # export dataset_name=$(echo "google_business_intelligence")
+    # export dataset_name=$(echo "")
 
     # ------------------------
 
@@ -229,31 +217,10 @@ else
     # echo "bq ls $PROJECT_ID:$dataset_name"
     # bq --location=$location ls $PROJECT_ID:$dataset_name
 
-    #           tableId            Type    Labels   Time Partitioning   Clustered Fields  
-    #  -------------------------- ------- -------- ------------------- ------------------ 
-    #   avocado_data               TABLE                                                  
-    #   departments                TABLE                                                  
-    #   employees                  TABLE                                                  
-    #   orders                     TABLE                                                  
-    #   student-performance-data   TABLE                                                  
-    #   warehouse                  TABLE
-
-    # ------------------------
 
     # echo "bq show $PROJECT_ID:$dataset_name"
     # bq --location=$location show $PROJECT_ID:$dataset_name
 
-    #    Last modified             ACLs             Labels    Type     Max time travel (Hours)  
-    #  ----------------- ------------------------- -------- --------- ------------------------- 
-    #   08 Mar 11:40:52   Owners:                            DEFAULT   168                      
-    #                       j622amilah@gmail.com,                                               
-    #                       projectOwners                                                       
-    #                     Writers:                                                              
-    #                       projectWriters                                                      
-    #                     Readers:                                                              
-    #                       projectReaders  
-
-    # ------------------------
 fi
 
 
