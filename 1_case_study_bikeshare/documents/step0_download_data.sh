@@ -64,19 +64,20 @@ if [[ $val == "X0" ]]
 then 
     # Follow instructions at CREATE a username
     
-    export USERNAME=$(echo "jamilah")
+    export USERNAME=$(echo "")
     
     aws iam create-access-key --user-name $USERNAME
+
+    # Set environmental variables
+    export AWS_ACCESS_KEY_ID=$(echo "")
+    export AWS_SECRET_ACCESS_KEY=$(echo "")
     
     # Set configuration file: put information into /home/oem2/.aws/credentials and /home/oem2/.aws/config files
-    aws configure set aws_access_key_id AKIAUZDPRVKIPHOVBEXG --profile $USERNAME
-    aws configure set aws_secret_access_key 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 --profile $USERNAME
+    aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile $USERNAME
+    aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile $USERNAME
     aws configure set region $region --profile $USERNAME
     aws configure set output $output --profile $USERNAME
     
-    # Set environmental variables
-    export AWS_ACCESS_KEY_ID=$(echo "AKIAUZDPRVKIPHOVBEXG")
-    export AWS_SECRET_ACCESS_KEY=$(echo "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")
 else
     echo "Do not setup USER AWS credentials"
 fi
