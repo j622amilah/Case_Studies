@@ -33,9 +33,9 @@ then
     #}   "CreateDate": "2023-06-21T09:20:32+00:00"ZY2s6SVxna6uvGfCCDK",
     #{
     #"AccessKey": {
-    #    "AccessKeyId": "AKIAUZDPRVKIJFUOJANI",
+    #    "AccessKeyId": "",
     #    "Status": "Active",
-    #    "SecretAccessKey": "0z2fz0oQr8KHEHKk+o68nZY2s6SVxna6uvGfCCDK",
+    #    "SecretAccessKey": "",
     #    "CreateDate": "2023-06-21T09:20:32+00:00"
     #}
     #
@@ -47,8 +47,8 @@ then
     aws configure set region $region
     aws configure set output $output
     
-    export AWS_ACCESS_KEY_ID=$(echo "AKIAUZDPRVKIJFUOJANI")
-    export AWS_SECRET_ACCESS_KEY=$(echo "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")
+    export AWS_ACCESS_KEY_ID=$(echo "")
+    export AWS_SECRET_ACCESS_KEY=$(echo "")
 else
     echo "Do not setup ROOT AWS credentials"
 fi
