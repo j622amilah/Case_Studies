@@ -6,14 +6,11 @@ clear
 
 export cur_path=$(pwd)
 
-cd /home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/GCP_ingestion_analysis_tools/git2/GCP_ingestion_analysis_tools
-
 source ./GCP_bigquery_case_study_library.sh
 source ./GCP_bigquery_statistic_library.sh
 source ./GCP_common_header.sh
 
 cd $cur_path
-# cd /home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/Case_Studies/git2/Case_Studies/1_case_study_bikeshare
 
 
 
@@ -29,7 +26,7 @@ download_data(){
 	# https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
 	# ---------------------------------------------
 	# Set the project region/location
-	export region=$(echo "eu-west-3")
+	export region=$(echo "")
 
 	# Set desired output format
 	export output=$(echo "text")  # json, yaml, yaml-stream, text, table
@@ -51,12 +48,10 @@ download_data(){
 	    # 	- To go to root user settings : Quick Links - My security credentials
 	    # 	- Open CloudShell - aws iam create-access-key
 	    # 
-	    #}   "CreateDate": "2023-06-21T09:20:32+00:00"ZY2s6SVxna6uvGfCCDK",
-	    #{
 	    #"AccessKey": {
-	    #    "AccessKeyId": "AKIAUZDPRVKIJFUOJANI",
+	    #    "AccessKeyId": "AWS_ACCESS_KEY_ID",
 	    #    "Status": "Active",
-	    #    "SecretAccessKey": "0z2fz0oQr8KHEHKk+o68nZY2s6SVxna6uvGfCCDK",
+	    #    "SecretAccessKey": "AWS_SECRET_ACCESS_KEY",
 	    #    "CreateDate": "2023-06-21T09:20:32+00:00"
 	    #}
 	    #
@@ -68,8 +63,8 @@ download_data(){
 	    aws configure set region $region
 	    aws configure set output $output
 	    
-	    export AWS_ACCESS_KEY_ID=$(echo "AKIAUZDPRVKIJFUOJANI")
-	    export AWS_SECRET_ACCESS_KEY=$(echo "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")
+	    export AWS_ACCESS_KEY_ID=$(echo "")
+	    export AWS_SECRET_ACCESS_KEY=$(echo "")
 	else
 	    echo "Do not setup ROOT AWS credentials"
 	fi
@@ -85,19 +80,19 @@ download_data(){
 	then 
 	    # Follow instructions at CREATE a username
 	    
-	    export USERNAME=$(echo "jamilah")
+	    export USERNAME=$(echo "")
 	    
 	    aws iam create-access-key --user-name $USERNAME
 	    
 	    # Set configuration file: put information into /home/oem2/.aws/credentials and /home/oem2/.aws/config files
-	    aws configure set aws_access_key_id AKIAUZDPRVKIPHOVBEXG --profile $USERNAME
-	    aws configure set aws_secret_access_key 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 --profile $USERNAME
+	    aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile $USERNAME
+	    aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile $USERNAME
 	    aws configure set region $region --profile $USERNAME
 	    aws configure set output $output --profile $USERNAME
 	    
 	    # Set environmental variables
-	    export AWS_ACCESS_KEY_ID=$(echo "AKIAUZDPRVKIPHOVBEXG")
-	    export AWS_SECRET_ACCESS_KEY=$(echo "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")
+	    export AWS_ACCESS_KEY_ID=$(echo "")
+	    export AWS_SECRET_ACCESS_KEY=$(echo "")
 	else
 	    echo "Do not setup USER AWS credentials"
 	fi
@@ -138,7 +133,7 @@ download_data(){
 	    echo "cur_path"
 	    echo $cur_path
 
-	    export folder_2_organize=$(echo "bike_casestudy/dataORG")
+	    export folder_2_organize=$(echo "casestudy/dataORG")
 	    echo "folder_2_organize"
 	    echo $folder_2_organize
 
@@ -210,7 +205,7 @@ UNION_table_type0(){
              CAST(end_lat AS STRING) AS end_lat,
              CAST(end_lng AS STRING) AS end_lng,
              CAST(member_casual AS STRING) AS member_casual
-             FROM `northern-eon-377721.google_analytics.'$TABLE_name'`;'
+             FROM `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name'`;'
             echo "-----------------------------------"
             
             # It fails: says table is not found ... does it take time to make the table??
@@ -221,7 +216,7 @@ UNION_table_type0(){
             # --location=$location \
             # --allow_large_results \
             # --use_legacy_sql=false \
-            # 'SELECT COUNT(*) FROM `northern-eon-377721.google_analytics.'$output_TABLE_name_cur'`;'
+            # 'SELECT COUNT(*) FROM `'$PROJECT_ID'.'$dataset_name'.'$output_TABLE_name_cur'`;'
             echo "-----------------------------------"
             
         else
@@ -265,7 +260,7 @@ UNION_table_type0(){
             CAST(end_lat AS STRING) AS end_lat,
             CAST(end_lng AS STRING) AS end_lng,
             CAST(member_casual AS STRING) AS member_casual
-            FROM `northern-eon-377721.google_analytics.'$output_TABLE_name_prev'`
+            FROM `'$PROJECT_ID'.'$dataset_name'.'$output_TABLE_name_prev'`
             UNION ALL 
             SELECT CAST(ride_id AS STRING) AS ride_id,
             CAST(rideable_type AS STRING) AS rideable_type,
@@ -280,7 +275,7 @@ UNION_table_type0(){
             CAST(end_lat AS STRING) AS end_lat,
             CAST(end_lng AS STRING) AS end_lng,
             CAST(member_casual AS STRING) AS member_casual
-            FROM `northern-eon-377721.google_analytics.'$TABLE_name'`;'
+            FROM `'$PROJECT_ID'.'$dataset_name'.'$TABLE_name'`;'
             echo "-----------------------------------"
             
             echo "-----------------------------------"
@@ -290,7 +285,7 @@ UNION_table_type0(){
             --location=$location \
             --allow_large_results \
             --use_legacy_sql=false \
-            'SELECT COUNT(*) FROM `northern-eon-377721.google_analytics.'$output_TABLE_name_cur'`;'
+            'SELECT COUNT(*) FROM `'$PROJECT_ID'.google_analytics.'$output_TABLE_name_cur'`;'
             echo "-----------------------------------"
             
             echo "-----------------------------------"
@@ -374,7 +369,7 @@ UNION_table_type1(){
              CAST(usertype AS STRING) AS usertype,
              CAST(gender AS STRING) AS gender,
              CAST(birthyear AS STRING) AS birthyear
-             FROM `northern-eon-377721.google_analytics.'$TABLE_name'`;'
+             FROM `$PROJECT_ID.google_analytics.'$TABLE_name'`;'
             echo "-----------------------------------"
             
             # It fails: says table is not found ... does it take time to make the table??
@@ -385,7 +380,7 @@ UNION_table_type1(){
             # --location=$location \
             # --allow_large_results \
             # --use_legacy_sql=false \
-            # 'SELECT COUNT(*) FROM `northern-eon-377721.google_analytics.'$output_TABLE_name_cur'`;'
+            # 'SELECT COUNT(*) FROM `$PROJECT_ID.google_analytics.'$output_TABLE_name_cur'`;'
             echo "-----------------------------------"
             
         else
@@ -428,7 +423,7 @@ UNION_table_type1(){
              CAST(usertype AS STRING) AS usertype,
              CAST(gender AS STRING) AS gender,
              CAST(birthyear AS STRING) AS birthyear
-            FROM `northern-eon-377721.google_analytics.'$output_TABLE_name_prev'`
+            FROM `$PROJECT_ID.google_analytics.'$output_TABLE_name_prev'`
             UNION ALL 
             SELECT CAST(trip_id AS STRING) AS trip_id,
             CAST(starttime AS STRING) AS starttime,
@@ -442,7 +437,7 @@ UNION_table_type1(){
              CAST(usertype AS STRING) AS usertype,
              CAST(gender AS STRING) AS gender,
              CAST(birthyear AS STRING) AS birthyear
-            FROM `northern-eon-377721.google_analytics.'$TABLE_name'`;'
+            FROM `$PROJECT_ID.google_analytics.'$TABLE_name'`;'
             echo "-----------------------------------"
             
             echo "-----------------------------------"
@@ -452,7 +447,7 @@ UNION_table_type1(){
             --location=$location \
             --allow_large_results \
             --use_legacy_sql=false \
-            'SELECT COUNT(*) FROM `northern-eon-377721.google_analytics.'$output_TABLE_name_cur'`;'
+            'SELECT COUNT(*) FROM `$PROJECT_ID.google_analytics.'$output_TABLE_name_cur'`;'
             echo "-----------------------------------"
             
             echo "-----------------------------------"
@@ -730,10 +725,7 @@ fi
 # https://cloud.google.com/bigquery/docs/locations
 # ---------------------------------------------
 # Set the project region/location
-# export location=$(echo "europe-west9-b")  # Paris
-export location=$(echo "europe-west9")  # Paris
-# export location=$(echo "EU")
-# export location=$(echo "US")   # says US is the global option
+# export location=$(echo "")
 
 # ---------------------------------------------
 
@@ -773,7 +765,7 @@ then
     # gcloud config list project
     
     # Set project
-    export PROJECT_ID=$(echo "northern-eon-377721")
+    export PROJECT_ID=$(echo "$PROJECT_ID")
     gcloud config set project $PROJECT_ID
 
     # List DATASETS in the current project
@@ -783,10 +775,9 @@ then
 
     #  datasetId         
     #  ------------------------ 
-    #   babynames               
-    #   city_data               
-    #   google_analytics_cours  
-    #   test       
+    #   datasetId_name0               
+    #   datasetId_name1               
+    #   datasetId_name2  
 
     # ------------------------
 
@@ -809,28 +800,19 @@ if [[ $val == "X0" ]]
 then 
 
     # Create a new DATASET named PROJECT_ID
-    # export dataset_name=$(echo "google_analytics")
+    # export dataset_name=$(echo "")
     # bq --location=$location mk $PROJECT_ID:$dataset_name
 
     # OR 
 
     # Use existing dataset
-    export dataset_name=$(echo "google_analytics")
+    export dataset_name=$(echo "")
 
     # ------------------------
 
     # List TABLES in the dataset
     # echo "bq ls $PROJECT_ID:$dataset_name"
     # bq --location=$location ls $PROJECT_ID:$dataset_name
-
-    #           tableId            Type    Labels   Time Partitioning   Clustered Fields  
-    #  -------------------------- ------- -------- ------------------- ------------------ 
-    #   avocado_data               TABLE                                                  
-    #   departments                TABLE                                                  
-    #   employees                  TABLE                                                  
-    #   orders                     TABLE                                                  
-    #   student-performance-data   TABLE                                                  
-    #   warehouse                  TABLE
 
     # ------------------------
 
