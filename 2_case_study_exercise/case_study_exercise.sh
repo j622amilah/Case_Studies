@@ -2,9 +2,6 @@
 
 
 
-# cd /home/oem2/Documents/projects/project4/git2/Case_Studies/2_case_study_exercise/
-
-
 clear
 
 
@@ -181,21 +178,6 @@ join_2_tables(){
 INNER JOIN `'$2'.'$3'.heartrate_seconds_merged` AS T8 ON T0.Id = T8.Id;'   
 
 }
-    
-
-
-# ---------------------------
-
-
-# ---------------------------
-
-
-
-
-    
-# ---------------------------
-    
-
 
 
 # ---------------------------
@@ -267,10 +249,7 @@ fi
 # https://cloud.google.com/bigquery/docs/locations
 # ---------------------------------------------
 # Set the project region/location
-# export location=$(echo "europe-west9-b")  # Paris
-export location=$(echo "europe-west9")  # Paris
-# export location=$(echo "EU")
-# export location=$(echo "US")   # says US is the global option
+export location=$(echo "")
 
 # ---------------------------------------------
 
@@ -310,20 +289,13 @@ then
     # gcloud config list project
     
     # Set project
-    export PROJECT_ID=$(echo "northern-eon-377721")
+    export PROJECT_ID=$(echo "")
     gcloud config set project $PROJECT_ID
 
     # List DATASETS in the current project
     # bq ls $PROJECT_ID:
     # OR
     # bq ls
-
-    #  datasetId         
-    #  ------------------------ 
-    #   babynames               
-    #   city_data               
-    #   google_analytics_cours  
-    #   test       
 
     # ------------------------
 
@@ -346,29 +318,20 @@ if [[ $val == "X0" ]]
 then 
 
     # Create a new DATASET named PROJECT_ID
-    # export dataset_name=$(echo "google_analytics_exercise")
+    # export dataset_name=$(echo "")
     # bq --location=$location mk $PROJECT_ID:$dataset_name
 
     # OR 
 
     # Use existing dataset
-    export dataset_name=$(echo "google_analytics_exercise")
+    export dataset_name=$(echo "")
 
     # ------------------------
 
     # List TABLES in the dataset
     # echo "bq ls $PROJECT_ID:$dataset_name"
     # bq --location=$location ls $PROJECT_ID:$dataset_name
-
-    #           tableId            Type    Labels   Time Partitioning   Clustered Fields  
-    #  -------------------------- ------- -------- ------------------- ------------------ 
-    #   avocado_data               TABLE                                                  
-    #   departments                TABLE                                                  
-    #   employees                  TABLE                                                  
-    #   orders                     TABLE                                                  
-    #   student-performance-data   TABLE                                                  
-    #   warehouse                  TABLE
-
+    
     # ------------------------
 
     # echo "bq show $PROJECT_ID:$dataset_name"
@@ -377,7 +340,7 @@ then
     #    Last modified             ACLs             Labels    Type     Max time travel (Hours)  
     #  ----------------- ------------------------- -------- --------- ------------------------- 
     #   08 Mar 11:40:52   Owners:                            DEFAULT   168                      
-    #                       j622amilah@gmail.com,                                               
+    #                       XXXXXXXX@gmail.com,                                               
     #                       projectOwners                                                       
     #                     Writers:                                                              
     #                       projectWriters                                                      
@@ -408,10 +371,10 @@ export val=$(echo "X1")
 
 if [[ $val == "X0" ]]
 then 
-	export path_outside_of_ingestion_folder=$(echo "/home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/Case_Studies/git2/Case_Studies/2_case_study_exercise")
-	export NAME_OF_DATASET=$(echo "arashnic/fitbit")
+	export path_outside_of_ingestion_folder=$(echo "/../Case_Studies/2_case_study_exercise")
+	export NAME_OF_DATASET=$(echo "NAME_OF_DATASET")
 	
-	download_data_Kaggle $path_outside_of_ingestion_folder $NAME_OF_DATASET
+	download_data $path_outside_of_ingestion_folder $NAME_OF_DATASET
 fi
 
 # OUTPUT : Creates a folder called downloaded_files
@@ -426,11 +389,11 @@ export val=$(echo "X1")
 
 if [[ $val == "X0" ]]
 then 
-	export path_folder_2_organize=$(echo "/home/oem2/Documents/PROGRAMMING/Github_analysis_PROJECTS/Case_Studies/git2/Case_Studies/2_case_study_exercise")
+	export path_folder_2_organize=$(echo "/../Case_Studies/2_case_study_exercise")
 
 	export ingestion_folder=$(echo "ingestion_folder_exercise")
 
-	export path_outside_of_ingestion_folder=$(echo "/home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study")
+	export path_outside_of_ingestion_folder=$(echo "/../Specialization_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study")
 
 	organize_zip_files_from_datasource_download $path_folder_2_organize $ingestion_folder $path_outside_of_ingestion_folder
 
@@ -446,7 +409,7 @@ export val=$(echo "X1")
 if [[ $val == "X0" ]]
 then 
 	# ******* CHANGE *******
-	export cur_path=$(echo "/home/oem2/Documents/ONLINE_CLASSES/Spécialisation_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study/ingestion_folder_exercise/csvdata")
+	export cur_path=$(echo "/../Specialization_Google_Data_Analytics/3_Google_Data_Analytics_Capstone_Complete_a_Case_Study/ingestion_folder_exercise/csvdata")
 	# ******* CHANGE *******
 
 	echo "cur_path"
@@ -621,8 +584,8 @@ then
     AVG(mean_light_distance) AS mean_light_distance,
     AVG(mean_calories) AS mean_calories,
     AVG(mean_hr) AS mean_hr,
-    COALESCE(AVG(sleep_duration),(SELECT AVG(sleep_duration) FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean1`)) AS sleep_duration
-    FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean1`
+    COALESCE(AVG(sleep_duration),(SELECT AVG(sleep_duration) FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean1`)) AS sleep_duration
+    FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean1`
     WHERE Id IS NOT NULL
 GROUP BY Id, ActivityDate
 ORDER BY Id, ActivityDate;'
@@ -654,7 +617,7 @@ then
     ROUND(AVG(mean_sedentary_distance)), ROUND(MAX(mean_sedentary_distance)), 
     ROUND(AVG(mean_fairlyactive_distance)), ROUND(MAX(mean_fairlyactive_distance)),
     ROUND(AVG(mean_light_distance)), ROUND(MAX(mean_light_distance))
-    FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean2`'
+    FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean2`'
     
     # Can do by hand, but there could be too much overlap and the classification error will be high if one manually groups 
     # SELECT
@@ -676,7 +639,7 @@ then
     # ROUND(AVG(mean_light_distance)), ROUND(MAX(mean_light_distance))
     # 211, 518 [113, 518]
 
-    # FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean2`
+    # FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean2`
 
 fi
 
@@ -710,7 +673,7 @@ then
     'WITH temptab AS (
     SELECT *,
     EXTRACT(DAYOFWEEK FROM ActivityDate) AS dte
-    FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean2`
+    FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean2`
 )
     SELECT
     IF(dte > 4, 2, 5) AS bin_number,
@@ -763,7 +726,7 @@ then
             --use_legacy_sql=false \
             'SELECT mean_total_distance AS feature,
             CASE WHEN lifestyle = "Sedentary" THEN 1 WHEN lifestyle = "Moderate_Active" THEN 2 WHEN lifestyle = "Light_Active" THEN 3 WHEN lifestyle = "Active" THEN 4 WHEN lifestyle = "Fairly_Active" THEN 4 WHEN lifestyle = "Light" THEN 4 END AS label
-    FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean3`'
+    FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean3`'
     
     export MODEL_name=$(echo "kmeans_model_label")
     
@@ -837,7 +800,7 @@ then
             --allow_large_results \
             --use_legacy_sql=false \
     'SELECT *
-    FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean4`
+    FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean4`
     WHERE lifestyle IS NOT NULL AND binary_lifestyle IS NOT NULL'
 
 fi
@@ -867,7 +830,7 @@ then
             --use_legacy_sql=false \
     'WITH tabtemp AS(
 SELECT 	lifestyle, lifesyle_NUM, kmeans_label, COUnt(*) AS count
-FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean5` 
+FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean5` 
 Group by 	
 lifesyle_NUM, lifestyle, kmeans_label
 Order by 	
@@ -986,7 +949,7 @@ then
             --use_legacy_sql=false \
     'SELECT *, 
     CASE WHEN kmeans_label = 2 THEN "Active" WHEN kmeans_label = 1 THEN "Light_Active" WHEN kmeans_label = 4 THEN "Moderate_Active" WHEN kmeans_label = 3 THEN "Sedentary" END AS kmeans_CATlabel
-    FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean5`
+    FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean5`
     WHERE lifestyle IS NOT NULL AND binary_lifestyle IS NOT NULL'
 	
 	
@@ -1060,15 +1023,18 @@ echo $category_FEAT_name_2samptest" where variables are "$category_FEAT_name_VAR
 # TYPE A RESULTS : probability of a categorical event happening 
 
 # Additive rule of probability: P(A or B) = P(A) + P(B) - P(A and B)
-# ie: the probablity of a ([casual user being female] OR [casual user being male]) AND [casual user using an electric_bike]
-# (Reponse)  (0.004766284784788248 + 0.007837291891818123) * 0.08795399798808465
+# [probability of 'using/doing/occuring with' categoryA event] + 
+# [probability of 'using/doing/occuring with' categoryB event] - 
+# [probability of categoryA event 'using/doing/occuring with' categoryB event]
+
+# Where categoryA has categories/events (user0, user1, user2) and
+# categoryB has categories/events (object0, object1, object2)
 
 # Multiplicative rule of probability: P(A and B) = P(A) * P(B)
-# ie: the probablity of a [casual user being female] AND [casual user using an electric_bike]
-# (Reponse)  0.004766284784788248 * 0.08795399798808465
-
 
 # Statistical significance of probablistic count for CATEGORICAL features
+# *** NOT AUTOMATED, but written out *** 
+
 # ---------------------------------------------
 # To determine how much of the data belongs to a certain category
 # ---------------------------------------------
@@ -1194,7 +1160,7 @@ then
 		    --use_legacy_sql=false \
             'WITH first_tabtemp AS (
   SELECT ROW_NUMBER() OVER(PARTITION BY kmeans_CATlabel ORDER BY RAND() DESC) AS num_row_per_class, *
-FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean6`
+FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean6`
 )
 SELECT * FROM first_tabtemp
     WHERE num_row_per_class < (SELECT COUNT(*) FROM first_tabtemp WHERE num_row_per_class IS NOT NULL GROUP BY kmeans_CATlabel ORDER BY COUNT(*) ASC LIMIT 1)'
@@ -1227,8 +1193,8 @@ SELECT * FROM first_tabtemp
   kmeans_CATlabel, 
   AVG(mean_steps_norm) AS mean_per_grp, 
   COUNT(*) AS len_per_grp,
-  (SELECT AVG(mean_steps_norm) FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean8`) AS pop_mean
-FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean8`
+  (SELECT AVG(mean_steps_norm) FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean8`) AS pop_mean
+FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean8`
 GROUP BY kmeans_CATlabel
 ), second_tabtemp AS(
 SELECT * FROM first_tabtemp T0
@@ -1252,7 +1218,7 @@ SELECT * FROM second_tabtemp'
   IF(kmeans_CATlabel = "Light_Active", mean_steps_norm, NULL) AS Light_vals,
   IF(kmeans_CATlabel = "Moderate_Active", mean_steps_norm, NULL) AS Moderate_vals,
   IF(kmeans_CATlabel = "Active", mean_steps_norm, NULL) AS Active_vals
-  FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean8`
+  FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean8`
 ),
 second_temporary_table AS (
   SELECT
@@ -1291,15 +1257,15 @@ T0.SSR AS SSR_scalar,
 T1.SSE AS SSE_scalar,
 -- Total sum of the squared error wrt population and individual group means
 T0.SSR + T1.SSE AS SST_scalar
-FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean9` T0
-CROSS JOIN (SELECT SSE FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean10`) T1
+FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean9` T0
+CROSS JOIN (SELECT SSE FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean10`) T1
 ),
 second_tabtemp AS (
 SELECT *,
 -- df_treatment = k-1
 k-1 AS df_treatment,
 -- n = total length of data across groups = len_per_grp
-k*(SELECT len_per_grp FROM `northern-eon-377721.google_analytics_exercise.exercise_full_clean9` LIMIT 1) AS n
+k*(SELECT len_per_grp FROM `'$PROJECT_ID'.'$dataset_name'.exercise_full_clean9` LIMIT 1) AS n
 FROM first_tabtemp
 ),
 third_tabtemp AS (
@@ -1710,7 +1676,7 @@ then
     AVG(mean_total_distance_norm) AS distance,
     AVG(mean_calories_norm) AS calories,
     AVG(mean_hr_norm) AS hr
-FROM `northern-eon-377721.google_analytics_exercise.kmeans_predict_exercise_type`
+FROM `'$PROJECT_ID'.'$dataset_name'.kmeans_predict_exercise_type`
 GROUP BY CENTROID_ID
 ORDER BY steps, distance, calories, hr, CENTROID_ID DESC'
 
@@ -1743,7 +1709,7 @@ then
     
     echo "---------------- Query Delete Tables ----------------"
     
-    export TABLE_name_join=$(echo "bikeshare_full")
+    export TABLE_name_join=$(echo "TABLE_name")
     
     # bq rm -t $PROJECT_ID:$dataset_name.$TABLE_name_join
     bq rm -t $PROJECT_ID:$dataset_name.exercise_2tables_full
